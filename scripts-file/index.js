@@ -1,3 +1,19 @@
+const createElements = (arr)=>{
+  const htmlElements = arr.map((el)=>`<span class="btn">${el}</span>`)
+  return htmlElements.join(' ');
+}
+
+const manageSpinner =(status)=>{
+  if(status === true){
+    document.getElementById('spinner').classList.remove('hidden')
+    document.getElementById('word-container').classList.add('hidden')
+  }
+  else{
+    document.getElementById('word-container').classList.remove('hidden')
+    document.getElementById('spinner').classList.add('hidden')
+  }
+}
+
 const url1 = 'https://openapi.programming-hero.com/api/levels/all'
 const loadLesson = () =>{
   fetch(url1)
@@ -13,6 +29,7 @@ const removeActive =()=>{
 }
 
 const loadLevelWord =(id)=>{
+  manageSpinner(true)
   const url2 =`https://openapi.programming-hero.com/api/level/${id}`
   fetch(url2)
   .then(response=> response.json())
@@ -54,10 +71,8 @@ const displayWordDetails = (word)=>{
       <p>zdfgv</p>
     </div>
     <div>
-      <h2 class="font-bold">Synonym</h2>
-      <span class="btn">zdfhvb</span>
-      <span class="btn">zdfcv</span>
-      <span class="btn">zdfgv</span>
+      <h2 class="font-bold">Synonyms</h2>
+      <div class ="">${createElements(word.synonyms)}</div>
     </div>
   `
   document.getElementById('word_modal').showModal()
@@ -73,6 +88,7 @@ if (words.length === 0) {
         <p class="text-xl font-medium text-gray-400">এই Lesson এ এখনো কোন Vocabulary যুক্ত করা হয়নি।</p>
         <h2 class="font-bold text-4xl">নেক্সট Lesson এ যান</h2>
   `
+  manageSpinner(false)
   return
 }
   words.forEach((word) => {
@@ -93,6 +109,7 @@ if (words.length === 0) {
     `
     wordContainer.appendChild(card)
   });
+  manageSpinner(false)
 }
 
 const displayLesson = (lessons) =>{
